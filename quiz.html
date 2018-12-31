@@ -1,7 +1,9 @@
 <html>
   <head>
   
-  </head>
+  <link rel="stylesheet" href="quizGame.css">
+</head>
+  
   <body>
     <h1>Quiz game</h1> 
     <div class="flex-container">
@@ -29,5 +31,69 @@
 <div id="result">Answer...</div>
  
     </div>
+	  <script>
+		  var score=0;
+var count=0;
+var fullUrl="";
+//set the score indicator
+document.getElementById('score').innerHTML="Your score is: " + score;
+//add the listener to load and question button
+document.addEventListener('DOMContentLoaded',function(){
+    document.getElementById('getMessage').onclick=function(){
+       count++;
+      // cateogry changes as game goes on
+      if (count < 4 ){
+  fullUrl='https://opentdb.com/api.php?amount=1&category=10&type=boolean';
+} else if (count < 8 ){
+  fullUrl='https://opentdb.com/api.php?amount=1&category=12&type=boolean';
+} else {
+  fullUrl='https://opentdb.com/api.php?amount=1&category=23&type=boolean';
+}
+      
+     //provide answer options and set them to unchecked
+      document.getElementById("radioa").checked = false;
+      document.getElementById("radiob").checked = false;
+      //answer comment
+      document.getElementById('result').innerHTML="";
+      //api object request
+      req=new XMLHttpRequest();
+      req.open("GET",fullUrl,true);
+      req.send();
+      req.onload=function(){
+      json=JSON.parse(req.responseText);
+ 
+    document.getElementById('question').innerHTML=json.results[0].question;
+
+};
+      };
+  });
+      
+//compare user answer and correct answer
+document.getElementById('radioa').onclick = function(){
+   
+	if (this.value==json.results[0].correct_answer){
+    document.getElementById('result').innerHTML="you are correct";
+    score=score+1;
+    document.getElementById('score').innerHTML="Your score is: " + score;
+  } else {
+    document.getElementById('result').innerHTML="almost";
+  }
+};
+
+document.getElementById('radiob').onclick = function(){
+	//document.getElementById('result').innerHTML=this.value;
+  if (this.value==json.results[0].correct_answer){
+    document.getElementById('result').innerHTML="you are correct";
+    score=score+1;
+    document.getElementById('score').innerHTML="Your score is: " + score;
+  } else {
+    document.getElementById('result').innerHTML="almost";
+  }
+  
+};
+//};
+//  });
+	  </script>
+	  
   </body>
 </html>
